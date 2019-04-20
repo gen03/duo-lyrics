@@ -1,0 +1,57 @@
+function run(argv) {
+  const app = Application('iTunes');
+
+  if (!app.running()) {
+    console.log('iTunes is not running');
+    return;
+  }
+
+  const tracks = app.selection();
+
+  const length = tracks.length;
+
+  if (!length) {
+    console.log('no tracks are selected');
+    return;
+  }
+
+  const message = `Are you sure to set lyrics for ${length} tracks?`;
+
+  if (!confirm(message)) {
+    console.log('cancelled');
+    return;
+  }
+
+  console.log('setting lyrics...');
+
+  const sentences = getSentences();
+
+  tracks.forEach(track => {
+    const name = track.name();
+    const match = name.match(/^(?:\d{2}-)?(\d{3})$/);
+    if (!match) return;
+    const id = parseInt(match[1], 10);
+    const sentence = sentences.find(s => s.id === id);
+    if (!sentence) return;
+    track.lyrics = sentence.text;
+  });
+
+  console.log('done');
+}
+
+function confirm(message) {
+  const app = Application.currentApplication();
+  app.includeStandardAdditions = true
+  try {
+    app.displayDialog(message);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function getSentences() {
+  return (
+<%= JSON.pretty_generate(sentences) %>
+  );
+}
