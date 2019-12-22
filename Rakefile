@@ -11,5 +11,5 @@ task :build do
 
   content = ERB.new(File.read('set-lyrics.js.erb')).result(binding)
 
-  open('set-lyrics.js', 'w') {|io| io << content }
+  File.write('set-lyrics.js', content)
 end
