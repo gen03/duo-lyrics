@@ -55,7 +55,7 @@ function getSentences() {
 [
   {
     "id": 1,
-    "text": "We must respect the will of the individual."
+    "text": "We must respect the will of the individual.\n\n個人の意思は尊重しなければいけない。"
   },
   {
     "id": 2,
