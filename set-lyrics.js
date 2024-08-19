@@ -59,7 +59,7 @@ function getSentences() {
   },
   {
     "id": 2,
-    "text": "Take it easy. I can assure you that everything will turn out fine."
+    "text": "Take it easy. I can assure you that everything will turn out fine.\n\n気楽にいけよ。大丈夫、すべてうまくいくさ。"
   },
   {
     "id": 3,
