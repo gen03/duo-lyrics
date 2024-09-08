@@ -1,5 +1,5 @@
 function run(argv) {
-  const app = Application('iTunes');
+  const app = Application('Music');
 
   if (!app.running()) {
     console.log('iTunes is not running');
@@ -63,7 +63,7 @@ function getSentences() {
   },
   {
     "id": 3,
-    "text": "Let go of your negative outlook on life. Always maintain a positive attitude."
+    "text": "Let go of your negative outlook on life. Always maintain a positive attitude.\n\n悲観的な人生観を捨てて、前絵向きな態度を常に持ち続けよう。"
   },
   {
     "id": 4,
