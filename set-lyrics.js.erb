@@ -1,57 +1,88 @@
 function run(argv) {
-  const app = Application('iTunes');
+  // iTunesアプリケーションに接続
+  const app = Application('Music');
 
+  // iTunesが起動しているか確認。起動していない場合はメッセージを表示して終了
   if (!app.running()) {
-    console.log('iTunes is not running');
+    console.log('iTunesが起動していません');
     return;
   }
 
+  // 現在iTunesで選択されているトラックを取得
   const tracks = app.selection();
 
+  // 選択されたトラックの数を取得
   const length = tracks.length;
 
+  // トラックが選択されていない場合、メッセージを表示して終了
   if (!length) {
-    console.log('no tracks are selected');
+    console.log('トラックが選択されていません');
     return;
   }
 
-  const message = `Are you sure to set lyrics for ${length} tracks?`;
+  // 選択されたトラックの数を使って確認メッセージを作成
+  const message = `選択された${length}曲に歌詞を設定してもよろしいですか？`;
 
+  // 確認ダイアログを表示し、ユーザーがキャンセルした場合は処理を終了
   if (!confirm(message)) {
-    console.log('cancelled');
+    console.log('キャンセルされました');
     return;
   }
 
-  console.log('setting lyrics...');
+  // 歌詞の設定を開始するメッセージを表示
+  console.log('歌詞を設定中...');
 
+  // 設定する歌詞のリストを取得
   const sentences = getSentences();
 
+  // 各選択されたトラックに対して処理を行う
   tracks.forEach(track => {
+    // トラック名を取得
     const name = track.name();
+
+    // トラック名からIDを正規表現で抽出 (例: '001', '002' のようなパターン)
     const match = name.match(/^(?:\d{2}-)?(\d{3})$/);
+
+    // マッチしなかった場合は、そのトラックの処理をスキップ
     if (!match) return;
+
+    // 抽出したIDを数値に変換
     const id = parseInt(match[1], 10);
+
+    // IDに対応する歌詞をリストから検索
     const sentence = sentences.find(s => s.id === id);
+
+    // 該当する歌詞が見つからない場合はスキップ
     if (!sentence) return;
+
+    // トラックの歌詞プロパティに対応する歌詞テキストを設定
     track.lyrics = sentence.text;
   });
 
-  console.log('done');
+  // 歌詞の設定が完了した旨をログに表示
+  console.log('完了しました');
 }
 
+// ユーザーに確認ダイアログを表示する関数
 function confirm(message) {
+  // 現在のアプリケーションを取得し、標準追加機能を有効にする (ダイアログ表示に必要)
   const app = Application.currentApplication();
-  app.includeStandardAdditions = true
+  app.includeStandardAdditions = true;
+
+  // 指定されたメッセージでダイアログを表示し、確認されたらtrueを返す
   try {
     app.displayDialog(message);
     return true;
   } catch (e) {
+    // ダイアログがキャンセルされた場合はfalseを返す
     return false;
   }
 }
 
+// 歌詞のリストを取得する関数
 function getSentences() {
+  // ERBテンプレートの中で JSON データを生成して返す
   return (
-<%= JSON.pretty_generate(sentences) %>
+    <%= JSON.pretty_generate(sentences) %>
   );
 }
