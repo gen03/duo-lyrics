@@ -40,8 +40,8 @@ function run(argv) {
     // トラック名を取得
     const name = track.name();
 
-    // トラック名からIDを正規表現で抽出 (例: '001', '002' のようなパターン)
-    const match = name.match(/^(?:\d{2}-)?(\d{3})$/);
+    // トラック名からIDを正規表現で抽出 (例: '001_Section1', '002_Section2' のようなパターン)
+    const match = name.match(/^(\d{3})_Section\d+$/);
 
     // マッチしなかった場合は、そのトラックの処理をスキップ
     if (!match) return;
